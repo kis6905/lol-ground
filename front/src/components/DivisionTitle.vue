@@ -1,0 +1,12 @@
+<template>
+  <v-alert
+    theme="dark"
+    border="start"
+    density="compact"
+    class="mb-3"
+    border-color="#0a568f"
+    color="#00355c"
+  >
+    <slot></slot>
+  </v-alert>
+</template>
