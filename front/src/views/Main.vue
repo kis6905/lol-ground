@@ -19,31 +19,35 @@
     </div>
 
     <DivisionTitle>
-      순위
+      Informations
     </DivisionTitle>
     <div class="division-content">
-
-    </div>
-
-    <DivisionTitle>
-      이번주 판 수
-    </DivisionTitle>
-    <div class="division-content">
-      
+      <Information></Information>
     </div>
   </v-container>
 </template>
 
 <script setup>
 import DivisionTitle from '../components/DivisionTitle.vue';
-import { ref } from 'vue';
+import Information from '../components/Information.vue';
+import { ref, onBeforeMount } from 'vue';
 
-const summonerNames = ref(["Develeaf", "세훈이에요", "퐁대전설", "정치위원장", "RIAN", "PororiS2"])
+const summonerNames = ref(['Develeaf', '세훈이에요', '퐁대전설', '정치위원장', 'RIAN', 'PororiS2'])
 
 function removeSummoner(summonerName) {
   console.log('removeSummoner!', summonerName)
   summonerNames.value = summonerNames.value.filter(name => name != summonerName)
 }
+
+onBeforeMount(async () => {
+  console.log('onBeforeMount')
+
+  // https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/develeaf
+  
+  // https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?type=ranked&start=0&count=20
+
+  // https://asia.api.riotgames.com/lol/match/v5/matches/KR_6190359301
+})
 
 </script>
 

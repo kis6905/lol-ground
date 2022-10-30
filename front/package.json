@@ -11,9 +11,13 @@
   "dependencies": {
     "@mdi/font": "5.9.55",
     "axios": "^1.1.3",
+    "install": "^0.13.0",
+    "lodash": "^4.17.21",
+    "npm": "^8.19.2",
     "roboto-fontface": "*",
     "sass": "^1.55.0",
     "vue": "^3.2.41",
+    "vue-lodash": "^2.1.2",
     "vue-router": "^4.1.6",
     "vuetify": "^3.0.0-beta.0",
     "vuex": "^4.0.2",
