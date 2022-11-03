@@ -11,5 +11,6 @@ LoL Members 전적을 쉽게 보기 위해 시작한 프로젝트
 ### server
 * springboot
 * kotlin
+* resilience4j
 
 <br/>
