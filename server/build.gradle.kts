@@ -22,6 +22,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 
     implementation("io.github.microutils:kotlin-logging:3.0.3")
     implementation("io.github.resilience4j:resilience4j-spring-boot2:1.7.1")

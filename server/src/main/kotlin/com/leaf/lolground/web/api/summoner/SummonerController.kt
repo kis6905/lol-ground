@@ -15,7 +15,6 @@ class SummonerController(
 ) {
 
     @GetMapping("/summoner/{summonerName}")
-    fun findSummoner(@PathVariable summonerName: String): Summoner {
-        return summonerService.findSummoner(summonerName)
-    }
+    fun findSummoner(@PathVariable summonerName: String): Summoner =
+        summonerService.findSummoner(summonerName)
 }

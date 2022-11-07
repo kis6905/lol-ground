@@ -1,7 +1,9 @@
 <configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{yyyy-MM-dd-HH:mm:ss:sss} [%thread] %-5level %logger{36}.%method\(\)[%line] - %msg%n</pattern>
+            <pattern>%clr(%d{yyyy-MM-dd HH:mm:ss:sss}){green} %clr([%thread]){magenta} %clr(%5p) %clr(%logger{36}){cyan}%clr(.%method\(\)){yellow}.%clr(%line){blue} - %msg%n</pattern>
         </encoder>
     </appender>
 

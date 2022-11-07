@@ -18,7 +18,7 @@ private val logger = KotlinLogging.logger {}
 class SummonerApi {
 
     @CircuitBreaker(name = "findSummoner", fallbackMethod = "fallbackFindSummoner")
-    fun findSummoner(summonerName: String): Summoner {
+    suspend fun findSummoner(summonerName: String): Summoner {
         logger.info("[API REQUEST] findSummoner, summonerName: $summonerName")
 
         val client: HttpClient = HttpClient.newHttpClient()
@@ -36,6 +36,7 @@ class SummonerApi {
         }
 
         return response.body()?.let {
+            logger.info("[API REQUEST] findSummoner OK, summonerName: $summonerName")
             val mapper = jacksonObjectMapper()
             mapper.readValue(it, Summoner::class.java)
         }?: throw RuntimeException("[API ERROR] body is null, summonerName: $summonerName")

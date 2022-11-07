@@ -1,0 +1,8 @@
+
+${AnsiColor.RED}   |\---/|
+${AnsiColor.DEFAULT}   | ,_, |
+    \_`_/-..----.
+ ___/ `   ' ,""+ \  ${AnsiColor.GREEN}[LoL Ground ${lolground.version}]
+${AnsiColor.DEFAULT}(__...'   __\    |`.___.';
+  (_,...'(_,.`__)/'.....+
+${AnsiColor.DEFAULT}

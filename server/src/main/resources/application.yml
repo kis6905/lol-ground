@@ -1,2 +1,10 @@
+lolground:
+  version: v0.1
+
 server:
   port: 8080
+
+spring:
+  output:
+    ansi:
+      enabled: always
