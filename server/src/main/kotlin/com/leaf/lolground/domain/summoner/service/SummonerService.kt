@@ -5,6 +5,9 @@ import com.leaf.lolground.infrastructure.api.lol.SummonerApi
 import com.leaf.lolground.infrastructure.helper.withBlockAndIOContext
 import kotlinx.coroutines.*
 import mu.KotlinLogging
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 
 private val logger = KotlinLogging.logger {}
@@ -14,14 +17,16 @@ class SummonerService(
     val summonerApi: SummonerApi,
 ) {
 
-    /*
-     * TODO:
-     *  circuit breaker 적용 테스트
-     *  cache 적용
-     */
+    @Cacheable(value = ["summoner"], key = "#summonerName")
     fun findSummoner(summonerName: String): Summoner = withBlockAndIOContext co@{
         val def = async { summonerApi.findSummoner(summonerName) }
         return@co def.await()
+    }
+
+    @Scheduled(fixedRateString = (1000 * 60 * 60).toString())
+    @CacheEvict(value = ["summoner"], allEntries = true)
+    fun evictSummoner(): Unit {
+        logger.info("Evict cache: summoner")
     }
 
 }

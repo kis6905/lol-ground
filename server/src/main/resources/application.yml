@@ -8,3 +8,10 @@ spring:
   output:
     ansi:
       enabled: always
+
+lol:
+  api:
+    token: RGAPI-c644f611-f269-4f91-85e6-01d9626e9765
+    endpoint:
+      summoner: https://kr.api.riotgames.com
+      match: https://asia.api.riotgames.com
