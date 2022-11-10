@@ -15,3 +15,4 @@ lol:
     endpoint:
       summoner: https://kr.api.riotgames.com
       match: https://asia.api.riotgames.com
+      league: https://kr.api.riotgames.com

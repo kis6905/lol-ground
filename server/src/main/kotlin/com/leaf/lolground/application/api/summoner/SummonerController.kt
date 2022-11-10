@@ -1,7 +1,7 @@
-package com.leaf.lolground.web.api.summoner
+package com.leaf.lolground.application.api.summoner
 
-import com.leaf.lolground.domain.summoner.dto.Summoner
-import com.leaf.lolground.domain.summoner.service.SummonerService
+import com.leaf.lolground.domain.summoner.SummonerService
+import com.leaf.lolground.domain.summoner.dto.SummonerDto
 import mu.KotlinLogging
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,6 +15,6 @@ class SummonerController(
 ) {
 
     @GetMapping("/summoner/{summonerName}")
-    fun findSummoner(@PathVariable summonerName: String): Summoner =
-        summonerService.findSummoner(summonerName)
+    fun findSummoner(@PathVariable summonerName: String): SummonerDto =
+        summonerService.findSummonerInfo(summonerName)
 }

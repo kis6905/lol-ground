@@ -1,12 +1,12 @@
-package com.leaf.lolground.domain.summoner.dto
+package com.leaf.lolground.infrastructure.api.lol.summoner.dto
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import java.util.*
 
 data class Summoner(
-    val id: String,
-    val accountId: String,
-    val puuid: String,
+    val id: String, // Encrypted summoner ID
+    val accountId: String, // Encrypted account ID
+    val puuid: String, // Encrypted PUUID
     val name: String,
     val profileIconId: Long,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

@@ -1,11 +1,14 @@
-package com.leaf.lolground.infrastructure.api.lol
+package com.leaf.lolground.infrastructure.api.lol.summoner
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.leaf.lolground.domain.summoner.dto.Summoner
+import com.leaf.lolground.infrastructure.api.lol.summoner.dto.Summoner
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.HttpStatus
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Repository
 import java.net.URI
 import java.net.http.HttpClient
@@ -27,12 +30,12 @@ class SummonerApi(
     @Value("\${lol.api.token}")
     lateinit var apiToken: String
 
+    @Cacheable(value = ["summoner"], key = "#summonerName")
     @CircuitBreaker(name = "findSummoner", fallbackMethod = "fallbackFindSummoner")
-    suspend fun findSummoner(summonerName: String): Summoner {
-        logger.info("[API REQUEST] findSummoner, summonerName: $summonerName")
+    fun findSummoner(summonerName: String): Summoner {
+        logger.info("[API request] findSummoner: summonerName: $summonerName")
 
-        val request: HttpRequest = HttpRequest
-            .newBuilder()
+        val request: HttpRequest = HttpRequest.newBuilder()
             .uri(URI.create("$endpoint$findSummonerUrl$summonerName"))
             .GET()
             .header("X-Riot-Token", apiToken)
@@ -41,18 +44,24 @@ class SummonerApi(
         val response: HttpResponse<String> = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
 
         if (response.statusCode() != HttpStatus.OK.value()) {
-            throw RuntimeException("[API ERROR] summonerName: $summonerName, statusCode: ${response.statusCode()}, message: ${response.body()}")
+            throw RuntimeException("[API error] findSummoner: summonerName: $summonerName, statusCode: ${response.statusCode()}, message: ${response.body()}")
         }
 
         return response.body()?.let {
-            logger.info("[API REQUEST] findSummoner OK, summonerName: $summonerName")
+            logger.info("[API request] findSummoner OK, summonerName: $summonerName")
             val mapper = jacksonObjectMapper()
             mapper.readValue(it, Summoner::class.java)
-        }?: throw RuntimeException("[API ERROR] body is null, summonerName: $summonerName")
+        }?: throw RuntimeException("[API error] findSummoner: body is null, summonerName: $summonerName")
     }
 
     fun fallbackFindSummoner(e: Throwable): Summoner {
-        logger.error("[API fallback] fallbackFindSummoner", e)
+        logger.error("[API fallback] findSummoner: ", e)
         return Summoner.empty()
+    }
+
+    @Scheduled(fixedRateString = (1000 * 60 * 60).toString())
+    @CacheEvict(value = ["summoner"], allEntries = true)
+    fun evictSummoner(): Unit {
+        logger.info("Evict cache: summoner")
     }
 }
