@@ -14,6 +14,7 @@ class SummonerFactory {
         val freeLeague: League? = leagueList.findByQueueType(QueueType.RANKED_FLEX_SR)
 
         return SummonerDto(
+            puuid = summoner.puuid,
             summonerName = summoner.name,
             soloTier = soloLeague?.tier ?: "UnRanked",
             soloRank = soloLeague?.rank.orEmpty(),

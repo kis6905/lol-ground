@@ -9,7 +9,7 @@ import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
-import java.net.URI
+import org.springframework.web.util.UriComponentsBuilder
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
@@ -21,7 +21,7 @@ class LeagueApi(
     val httpClient: HttpClient,
 ) {
     companion object {
-        const val findLeagueBySummonerUrl = "/lol/league/v4/entries/by-summoner/"
+        const val findLeagueBySummonerUrl = "/lol/league/v4/entries/by-summoner/{summonerId}"
     }
 
     @Value("\${lol.api.endpoint.league}")
@@ -31,10 +31,14 @@ class LeagueApi(
 
     @CircuitBreaker(name = "findLeagueBySummoner", fallbackMethod = "fallbackFindLeagueBySummoner")
     suspend fun findLeagueListBySummoner(summonerId: String): List<League> {
-        logger.info("[API request] findLeagueBySummoner: summonerId: $summonerId")
+        val uri = UriComponentsBuilder.fromHttpUrl(endpoint)
+            .path(findLeagueBySummonerUrl)
+            .build(summonerId)
+
+        logger.info("[API request] findLeagueBySummoner: summonerId: $summonerId, uri: $uri")
 
         val request: HttpRequest = HttpRequest.newBuilder()
-            .uri(URI.create("$endpoint$findLeagueBySummonerUrl$summonerId"))
+            .uri(uri)
             .GET()
             .header("X-Riot-Token", apiToken)
             .build()

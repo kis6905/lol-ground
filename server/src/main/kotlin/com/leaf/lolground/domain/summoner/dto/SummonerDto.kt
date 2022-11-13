@@ -1,6 +1,7 @@
 package com.leaf.lolground.domain.summoner.dto
 
 data class SummonerDto(
+    val puuid: String,
     val summonerName: String,
     val soloTier: String,
     val soloRank: String,
