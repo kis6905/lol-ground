@@ -1,8 +1,6 @@
 <template>
   <v-container>
-    <DivisionTitle>
-      Members
-    </DivisionTitle>
+    <DivisionTitle>Members</DivisionTitle>
     <div class="division-content">
       <v-chip
         v-for="summonerName in summonerNames"
@@ -14,41 +12,146 @@
         size="large"
       >
         {{ summonerName }}
-        <v-icon class="ml-2" icon="mdi-close" @click="removeSummoner(summonerName)" />
+        <v-icon
+          class="ml-2"
+          icon="mdi-close"
+          @click="removeSummoner(summonerName)"
+        />
       </v-chip>
     </div>
 
-    <DivisionTitle>
-      Informations
-    </DivisionTitle>
+    <DivisionTitle>Informations</DivisionTitle>
     <div class="division-content">
-      <Information></Information>
+      <Information
+        v-for="summonerDetail in summonerDetailList"
+        :key="summonerDetail.summonerName"
+        :summonerDetail="summonerDetail"
+      />
     </div>
   </v-container>
 </template>
 
 <script setup>
-import DivisionTitle from '../components/DivisionTitle.vue';
-import Information from '../components/Information.vue';
-import { ref, onBeforeMount } from 'vue';
+import DivisionTitle from "../components/DivisionTitle.vue";
+import Information from "../components/Information.vue";
+import { ref, onBeforeMount } from "vue";
 
-const summonerNames = ref(['Develeaf', '세훈이에요', '퐁대전설', '정치위원장', 'RIAN', 'PororiS2'])
+const summonerNames = ref([
+  "Develeaf",
+  "세훈이에요",
+  "퐁대전설",
+  "정치위원장",
+  "RIAN",
+  "PororiS2",
+]);
+
+const summonerDetailList = ref([
+  {
+    summonerName: "1LEAF",
+    soloTier: "BRONZE",
+    soloRank: "IV",
+    soloLeaguePoints: 0,
+    soloWins: 26,
+    soloLosses: 20,
+    freeTier: "GOLD",
+    freeRank: "II",
+    freeLeaguePoints: 43,
+    freeWins: 178,
+    freeLosses: 178,
+    soloWinRate: "56.52",
+    freeWinRate: "50.00",
+    latestRecord: [
+      { info: "승", time: "1h" },
+      { info: "승", time: "1h" },
+      { info: "승", time: "1h" },
+      { info: "승", time: "1h" },
+      { info: "패", time: "1h" },
+    ],
+  },
+  {
+    summonerName: "신월동불주먹",
+    soloTier: "PLATINUM",
+    soloRank: "III",
+    soloLeaguePoints: 1,
+    soloWins: 35,
+    soloLosses: 46,
+    freeTier: "BRONZE",
+    freeRank: "II",
+    freeLeaguePoints: 33,
+    freeWins: 300,
+    freeLosses: 400,
+    soloWinRate: "30.00",
+    freeWinRate: "40.00",
+    latestRecord: [
+      { info: "승", time: "1d" },
+      { info: "승", time: "1d" },
+      { info: "승", time: "1d" },
+      { info: "승", time: "1d" },
+      { info: "패", time: "1d" },
+    ],
+  },
+  {
+    summonerName: "신월동불주먹",
+    soloTier: "SILVER",
+    soloRank: "III",
+    soloLeaguePoints: 1,
+    soloWins: 35,
+    soloLosses: 46,
+    freeTier: "BRONZE",
+    freeRank: "II",
+    freeLeaguePoints: 33,
+    freeWins: 300,
+    freeLosses: 400,
+    soloWinRate: "30.00",
+    freeWinRate: "40.00",
+    latestRecord: [
+      { info: "승", time: "1d" },
+      { info: "승", time: "1d" },
+      { info: "승", time: "1d" },
+      { info: "승", time: "1d" },
+      { info: "패", time: "1d" },
+    ],
+  },
+  {
+    summonerName: "신월동불주먹",
+    soloTier: "GOLD",
+    soloRank: "III",
+    soloLeaguePoints: 1,
+    soloWins: 35,
+    soloLosses: 46,
+    freeTier: "BRONZE",
+    freeRank: "II",
+    freeLeaguePoints: 33,
+    freeWins: 300,
+    freeLosses: 400,
+    soloWinRate: "30.00",
+    freeWinRate: "40.00",
+    latestRecord: [
+      { info: "승", time: "10d" },
+      { info: "승", time: "10d" },
+      { info: "승", time: "10d" },
+      { info: "승", time: "10d" },
+      { info: "패", time: "10d" },
+    ],
+  },
+]);
 
 function removeSummoner(summonerName) {
-  console.log('removeSummoner!', summonerName)
-  summonerNames.value = summonerNames.value.filter(name => name != summonerName)
+  console.log("removeSummoner!", summonerName);
+  summonerNames.value = summonerNames.value.filter(
+    (name) => name != summonerName
+  );
 }
 
 onBeforeMount(async () => {
-  console.log('onBeforeMount')
+  console.log("onBeforeMount");
 
   // https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/develeaf
-  
+
   // https://asia.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?type=ranked&start=0&count=20
 
   // https://asia.api.riotgames.com/lol/match/v5/matches/KR_6190359301
-})
-
+});
 </script>
 
 <style lang="scss" scoped>

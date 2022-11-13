@@ -1,14 +1,18 @@
 export default Object.freeze({
-  bronze: Object.freeze({
-    color: '#572f02'
+  BRONZE: Object.freeze({
+    color: '#564d4354',
+    image: 'https://opgg-static.akamaized.net/images/medals_new/bronze.png'
   }),
-  silver: Object.freeze({
-    color: '#6c6c6c'
+  SILVER: Object.freeze({
+    color: '#a4b3c836',
+    image: 'https://opgg-static.akamaized.net/images/medals_new/silver.png'
   }),
-  gold: Object.freeze({
-    color: '#5e5501'
+  GOLD: Object.freeze({
+    color: '#5e550154',
+    image: 'https://opgg-static.akamaized.net/images/medals_new/gold.png'
   }),
-  platinum: Object.freeze({
-    color: '#016f86'
+  PLATINUM: Object.freeze({
+    color: '#016f8654',
+    image: 'https://opgg-static.akamaized.net/images/medals_new/platinum.png'
   }),
 })
