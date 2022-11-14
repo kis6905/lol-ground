@@ -1,5 +1,7 @@
 package com.leaf.lolground.domain.match
 
+import com.leaf.lolground.domain.match.dto.MatchDto
+import com.leaf.lolground.domain.match.factory.MatchFactory
 import com.leaf.lolground.infrastructure.api.lol.match.MatchApi
 import com.leaf.lolground.infrastructure.api.lol.match.dto.Match
 import com.leaf.lolground.infrastructure.helper.withBlockAndIOContext
@@ -12,22 +14,33 @@ private val logger = KotlinLogging.logger {}
 @Service
 class MatchService(
     val matchApi: MatchApi,
+    val matchFactory: MatchFactory,
 ) {
 
-    fun findMatchIds(puuid: String): List<String> = withBlockAndIOContext co@{
+    fun findMatchIds(puuid: String): MatchDto = withBlockAndIOContext co@{
         val matchIdListDef = async { matchApi.findMatchIdList(puuid) }
         val matchIdList = matchIdListDef.await()
 
-        matchIdList.forEach {
+        val matchList: List<Match?> = matchIdList.map {
             val matchDef = async { findMatchWithCache(it) }
-            val match = matchDef.await()
-            logger.info("match: $match")
+            matchDef.await()
         }
 
-        return@co matchIdList
+        val playedGameCountOfThisWeek = matchList
+            .filterNotNull()
+            .count { it.info.isThisWeek() }
+
+        val recentMatches = matchList
+            .filterNotNull()
+            .map { matchFactory.createRecentMatch(it.info, puuid) }
+
+        return@co MatchDto(
+            playedGameCountOfThisWeek = playedGameCountOfThisWeek,
+            recentMatches = recentMatches,
+        )
     }
 
-    suspend fun findMatchWithCache(matchId: String): Match =
+    suspend fun findMatchWithCache(matchId: String): Match? =
         matchApi.findMatchWithCache(matchId)
 
 }

@@ -23,13 +23,16 @@ class SummonerService(
         val summonerDef = async { findSummonerWithCache(summonerName) }
         val summoner = summonerDef.await()
 
-        val leagueListDef = async { leagueApi.findLeagueListBySummoner(summoner.id) }
-        val leagueList = leagueListDef.await()
+        summoner?.apply {
+            val leagueListDef = async { leagueApi.findLeagueListBySummoner(summoner.id) }
+            val leagueList = leagueListDef.await()
+            return@co summonerFactory.createSummonerDto(summoner, leagueList)
+        }
 
-        return@co summonerFactory.createSummonerDto(summoner, leagueList)
+        return@co SummonerDto()
     }
 
-    suspend fun findSummonerWithCache(summonerName: String): Summoner =
+    suspend fun findSummonerWithCache(summonerName: String): Summoner? =
         summonerApi.findSummonerWithCache(summonerName)
 
 }

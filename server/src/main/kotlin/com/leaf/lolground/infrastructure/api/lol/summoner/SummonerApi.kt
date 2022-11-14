@@ -32,9 +32,9 @@ class SummonerApi(
     @Value("\${lol.api.token}")
     lateinit var apiToken: String
 
-    @Cacheable(value = ["summoner"], key = "#summonerName")
+    @Cacheable(value = ["summoner"], key = "#summonerName", unless = "#result == null")
     @CircuitBreaker(name = "findSummoner", fallbackMethod = "fallbackFindSummoner")
-    fun findSummonerWithCache(summonerName: String): Summoner {
+    fun findSummonerWithCache(summonerName: String): Summoner? {
         val uri = UriComponentsBuilder.fromHttpUrl(endpoint)
             .path(findSummonerUrl)
             .build(summonerName)
@@ -60,9 +60,9 @@ class SummonerApi(
         }?: throw RuntimeException("[API error] findSummoner: body is null, summonerName: $summonerName")
     }
 
-    fun fallbackFindSummoner(e: Throwable): Summoner {
+    fun fallbackFindSummoner(e: Throwable): Summoner? {
         logger.error("[API fallback] findSummoner: ", e)
-        return Summoner.empty()
+        return null
     }
 
     @Scheduled(fixedRateString = (1000 * 60 * 60).toString())

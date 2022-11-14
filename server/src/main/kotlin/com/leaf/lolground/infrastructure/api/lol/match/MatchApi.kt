@@ -2,6 +2,7 @@ package com.leaf.lolground.infrastructure.api.lol.match
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.leaf.lolground.infrastructure.api.lol.match.constants.QueueId
 import com.leaf.lolground.infrastructure.api.lol.match.dto.Match
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
 import mu.KotlinLogging
@@ -39,7 +40,7 @@ class MatchApi(
             .path(findMatchIdListUrl)
             .queryParam("start", 0)
             .queryParam("count", 5)
-            .queryParam("queue", 420) // 솔랭
+            .queryParam("queue", QueueId.SOLO_RANK.id)
             .build(puuid)
 
         logger.info("[API request] findMatchIdList: puuid: $puuid, uri: $uri")
@@ -68,9 +69,9 @@ class MatchApi(
         return emptyList()
     }
 
-    @Cacheable(value = ["match"], key = "#matchId")
+    @Cacheable(value = ["match"], key = "#matchId", unless = "#result == null")
     @CircuitBreaker(name = "findMatch", fallbackMethod = "fallbackFindMatch")
-    fun findMatchWithCache(matchId: String): Match {
+    fun findMatchWithCache(matchId: String): Match? {
         val uri = UriComponentsBuilder.fromHttpUrl(endpoint)
             .path(findMatchUrl)
             .build(matchId)
@@ -96,9 +97,9 @@ class MatchApi(
         }?: throw RuntimeException("[API error] findMatch: body is null, matchId: $matchId")
     }
 
-    fun fallbackFindMatch(e: Throwable): Match {
+    fun fallbackFindMatch(e: Throwable): Match? {
         logger.error("[API fallback] findMatch: ", e)
-        return Match.empty()
+        return null
     }
 
     @Scheduled(fixedRateString = (1000 * 60 * 60 * 24 * 3).toString())
