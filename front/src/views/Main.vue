@@ -1,5 +1,7 @@
 <template>
   <v-container>
+    <DivisionTitle>Registration</DivisionTitle>
+    <div class="division-content"></div>
     <DivisionTitle>Members</DivisionTitle>
     <div class="division-content">
       <v-chip
@@ -34,6 +36,7 @@
 <script setup>
 import DivisionTitle from "../components/DivisionTitle.vue";
 import Information from "../components/Information.vue";
+import Registration from "../components/Registration.vue";
 import { ref, onBeforeMount } from "vue";
 
 const summonerNames = ref([
@@ -60,12 +63,12 @@ const summonerDetailList = ref([
     freeLosses: 178,
     soloWinRate: "56.52",
     freeWinRate: "50.00",
-    latestRecord: [
-      { info: "승", time: "1h" },
-      { info: "승", time: "1h" },
-      { info: "승", time: "1h" },
-      { info: "승", time: "1h" },
-      { info: "패", time: "1h" },
+    recentMatches: [
+      { win: true, playedAgo: "10d" },
+      { win: true, playedAgo: "10d" },
+      { win: true, playedAgo: "10d" },
+      { win: true, playedAgo: "10d" },
+      { win: true, playedAgo: "10d" },
     ],
   },
   {
@@ -82,12 +85,12 @@ const summonerDetailList = ref([
     freeLosses: 400,
     soloWinRate: "30.00",
     freeWinRate: "40.00",
-    latestRecord: [
-      { info: "승", time: "1d" },
-      { info: "승", time: "1d" },
-      { info: "승", time: "1d" },
-      { info: "승", time: "1d" },
-      { info: "패", time: "1d" },
+    recentMatches: [
+      { win: true, playedAgo: "10d" },
+      { win: false, playedAgo: "10d" },
+      { win: true, playedAgo: "10d" },
+      { win: true, playedAgo: "10d" },
+      { win: true, playedAgo: "10d" },
     ],
   },
   {
@@ -104,12 +107,12 @@ const summonerDetailList = ref([
     freeLosses: 400,
     soloWinRate: "30.00",
     freeWinRate: "40.00",
-    latestRecord: [
-      { info: "승", time: "1d" },
-      { info: "승", time: "1d" },
-      { info: "승", time: "1d" },
-      { info: "승", time: "1d" },
-      { info: "패", time: "1d" },
+    recentMatches: [
+      { win: true, playedAgo: "10d" },
+      { win: true, playedAgo: "10d" },
+      { win: false, playedAgo: "10d" },
+      { win: true, playedAgo: "10d" },
+      { win: true, playedAgo: "10d" },
     ],
   },
   {
@@ -126,12 +129,12 @@ const summonerDetailList = ref([
     freeLosses: 400,
     soloWinRate: "30.00",
     freeWinRate: "40.00",
-    latestRecord: [
-      { info: "승", time: "10d" },
-      { info: "승", time: "10d" },
-      { info: "승", time: "10d" },
-      { info: "승", time: "10d" },
-      { info: "패", time: "10d" },
+    recentMatches: [
+      { win: true, playedAgo: "10d" },
+      { win: false, playedAgo: "10d" },
+      { win: true, playedAgo: "10d" },
+      { win: false, playedAgo: "10d" },
+      { win: true, playedAgo: "10d" },
     ],
   },
 ]);
