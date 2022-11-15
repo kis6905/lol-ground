@@ -1,7 +1,9 @@
 <template>
   <v-container>
     <DivisionTitle>Registration</DivisionTitle>
-    <div class="division-content"></div>
+    <div class="division-content">
+      <Registration @registraionSummoner="registraionSummoner" />
+    </div>
     <DivisionTitle>Members</DivisionTitle>
     <div class="division-content">
       <v-chip
@@ -146,6 +148,9 @@ function removeSummoner(summonerName) {
   );
 }
 
+function registraionSummoner(summonerName) {
+  console.log("registraionSummoner!", summonerName);
+}
 onBeforeMount(async () => {
   console.log("onBeforeMount");
 
