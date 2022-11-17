@@ -25,4 +25,8 @@ data class SummonerDto(
             val winRate: Double = this.freeWins.toDouble() / (this.freeWins + this.freeLosses).toDouble() * 100
             return String.format("%.2f", winRate)
         }
+
+    fun isEmpty(): Boolean {
+        return this.puuid.isEmpty()
+    }
 }

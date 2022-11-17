@@ -35,6 +35,8 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
     testImplementation("io.kotest:kotest-framework-engine-jvm:$kotestVersion")
+    testImplementation("io.mockk:mockk:1.13.2")
+    testImplementation("com.appmattus.fixture:fixture:1.2.0")
 }
 
 tasks.test {

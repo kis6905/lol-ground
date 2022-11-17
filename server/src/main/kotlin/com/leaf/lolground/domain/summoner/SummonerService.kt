@@ -19,7 +19,7 @@ class SummonerService(
     val summonerFactory: SummonerFactory,
 ) {
 
-    fun findSummonerInfo(summonerName: String): SummonerDto = withBlockAndIOContext co@{
+    fun findSummonerInfo(summonerName: String): SummonerDto? = withBlockAndIOContext co@{
         val summonerDef = async { findSummonerWithCache(summonerName) }
         val summoner = summonerDef.await()
 
@@ -29,7 +29,7 @@ class SummonerService(
             return@co summonerFactory.createSummonerDto(summoner, leagueList)
         }
 
-        return@co SummonerDto()
+        return@co null
     }
 
     suspend fun findSummonerWithCache(summonerName: String): Summoner? =
