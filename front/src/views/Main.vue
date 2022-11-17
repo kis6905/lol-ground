@@ -2,7 +2,10 @@
   <v-container>
     <DivisionTitle>Registration</DivisionTitle>
     <div class="division-content">
-      <Registration @registraionSummoner="registraionSummoner" />
+      <Registration
+        @registraionSummoner="registraionSummoner"
+        :summonerNames="summonerNames"
+      />
     </div>
     <DivisionTitle>Members</DivisionTitle>
     <div class="division-content">
@@ -39,16 +42,9 @@
 import DivisionTitle from "../components/DivisionTitle.vue";
 import Information from "../components/Information.vue";
 import Registration from "../components/Registration.vue";
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, reactive } from "vue";
 
-const summonerNames = ref([
-  "Develeaf",
-  "세훈이에요",
-  "퐁대전설",
-  "정치위원장",
-  "RIAN",
-  "PororiS2",
-]);
+let summonerNames = ref([]);
 
 const summonerDetailList = ref([
   {
@@ -142,17 +138,38 @@ const summonerDetailList = ref([
 ]);
 
 function removeSummoner(summonerName) {
-  console.log("removeSummoner!", summonerName);
+  // console.log("removeSummoner!", summonerName);
   summonerNames.value = summonerNames.value.filter(
     (name) => name != summonerName
   );
 }
 
 function registraionSummoner(summonerName) {
-  console.log("registraionSummoner!", summonerName);
+  // console.log("registraionSummoner!", summonerName);
 }
 onBeforeMount(async () => {
   console.log("onBeforeMount");
+
+  summonerNames.value = JSON.parse(localStorage.getItem("summonerNames"));
+  // localStorage.setItem("summonerNames");
+  console.log("this.summonerNames : ", summonerNames.value);
+  if (summonerNames.value) {
+    return;
+  }
+
+  localStorage.setItem(
+    "summonerNames",
+    JSON.stringify([
+      "Develeaf",
+      "세훈이에요",
+      "퐁대전설",
+      "정치위원장",
+      "RIAN",
+      "PororiS2",
+    ])
+  );
+
+  summonerNames.value = JSON.parse(localStorage.getItem("summonerNames"));
 
   // https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/develeaf
 

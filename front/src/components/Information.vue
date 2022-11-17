@@ -70,9 +70,9 @@ const props = defineProps({
 });
 
 onBeforeMount(() => {
-  console.log("onBeforeMount", tierConstants.silver);
-  console.log("summonerDetail", props.summonerDetail);
-  console.log("color", tierConstants[props.summonerDetail.soloTier].color);
+  // console.log("onBeforeMount", tierConstants.silver);
+  // console.log("summonerDetail", props.summonerDetail);
+  // console.log("color", tierConstants[props.summonerDetail.soloTier].color);
 });
 </script>
 
