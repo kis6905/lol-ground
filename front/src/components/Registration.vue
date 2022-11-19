@@ -1,12 +1,40 @@
 <template>
-  <div></div>
+  <div class="d-flex">
+    <v-text-field
+      v-model="summonerName"
+      class="mr-3"
+      variant="solo"
+      density="compact"
+      clearable
+      full-width
+      hide-details
+      @keyup.enter="registSummoner"
+    ></v-text-field>
+    <v-btn
+      rounded="lg"
+      icon="mdi-plus"
+      color="primary"
+      size="small"
+      min-width="40"
+      @click="registSummoner"
+    ></v-btn>
+  </div>
 </template>
 
 <script setup>
-import { onBeforeMount } from "vue";
+import { ref, onBeforeMount } from "vue";
+import { useSummonerStore } from "../store/summoner";
+import { storeToRefs } from "pinia";
+
+const store = useSummonerStore();
+const { summonerNames, summonerDetailList } = storeToRefs(store);
+
+const summonerName = ref("");
+
+const registSummoner = () => {
+  store.registraionSummoner(summonerName.value);
+  summonerName.value = "";
+};
 
 onBeforeMount(() => {});
 </script>
-
-<style lang="scss" scoped>
-</style>
