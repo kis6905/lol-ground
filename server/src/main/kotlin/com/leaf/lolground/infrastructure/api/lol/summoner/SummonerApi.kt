@@ -1,8 +1,7 @@
 package com.leaf.lolground.infrastructure.api.lol.summoner
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.leaf.lolground.infrastructure.api.lol.match.MatchApi
 import com.leaf.lolground.infrastructure.api.lol.summoner.dto.Summoner
+import com.leaf.lolground.infrastructure.helper.parseJson
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
@@ -12,7 +11,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Repository
 import org.springframework.web.util.UriComponentsBuilder
-import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
@@ -55,8 +53,7 @@ class SummonerApi(
 
         return response.body()?.let {
             logger.info("[API request] findSummoner OK, summonerName: $summonerName")
-            val mapper = jacksonObjectMapper()
-            mapper.readValue(it, Summoner::class.java)
+            it.parseJson()
         }?: throw RuntimeException("[API error] findSummoner: body is null, summonerName: $summonerName")
     }
 
@@ -65,7 +62,7 @@ class SummonerApi(
         return null
     }
 
-    @Scheduled(fixedRateString = (1000 * 60 * 60).toString())
+    @Scheduled(fixedRateString = (1000 * 60 * 60 * 24 * 3).toString()) // 3 days
     @CacheEvict(value = ["summoner"], allEntries = true)
     fun evictSummoner(): Unit {
         logger.info("Evict cache: summoner")

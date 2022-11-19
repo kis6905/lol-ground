@@ -1,15 +1,24 @@
 package com.leaf.lolground.infrastructure.helper
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import mu.KotlinLogging
-import kotlin.reflect.KClass
 
-private val logger = KotlinLogging.logger {}
+val logger = KotlinLogging.logger {}
 
-fun <T: Any> String.parseJson(clazz: KClass<T>): T? =
+inline fun <reified T: Any> String.parseJson(): T? =
     try {
         val mapper = jacksonObjectMapper()
-        mapper.readValue(this, clazz.java)
+        mapper.readValue(this, T::class.java)
+    } catch (e: Exception) {
+        logger.error("Error - parseJson", e)
+        null
+    }
+
+inline fun <reified T: Any> String.parseJsonList(): List<T>? =
+    try {
+        val mapper = jacksonObjectMapper()
+        mapper.readValue(this, object: TypeReference<List<T>>() {})
     } catch (e: Exception) {
         logger.error("Error - parseJson", e)
         null

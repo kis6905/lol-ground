@@ -13,5 +13,5 @@ class MatchController(
 
     @GetMapping("/match/info/{puuid}")
     fun findMatchInfo(@PathVariable puuid: String): MatchDto =
-        matchService.findMatchIds(puuid)
+        matchService.findMatchInfo(puuid)
 }

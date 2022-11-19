@@ -17,7 +17,7 @@ class MatchService(
     val matchFactory: MatchFactory,
 ) {
 
-    fun findMatchIds(puuid: String): MatchDto = withBlockAndIOContext co@{
+    fun findMatchInfo(puuid: String): MatchDto = withBlockAndIOContext co@{
         val matchIdListDef = async { matchApi.findMatchIdList(puuid) }
         val matchIdList = matchIdListDef.await()
 
@@ -28,11 +28,11 @@ class MatchService(
 
         val playedGameCountOfThisWeek = matchList
             .filterNotNull()
-            .count { it.info.isThisWeek() }
+            .count { it.matchInfo.isThisWeek() }
 
         val recentMatches = matchList
             .filterNotNull()
-            .map { matchFactory.createRecentMatch(it.info, puuid) }
+            .map { matchFactory.createRecentMatch(it.matchInfo, puuid) }
 
         return@co MatchDto(
             playedGameCountOfThisWeek = playedGameCountOfThisWeek,

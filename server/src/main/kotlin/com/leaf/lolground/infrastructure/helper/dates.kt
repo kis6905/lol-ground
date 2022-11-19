@@ -1,12 +1,14 @@
 package com.leaf.lolground.infrastructure.helper
 
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.ZoneId
+import java.time.*
 import java.util.*
 
 fun Date.toLocalDateTime(): LocalDateTime =
     this.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
+
+fun LocalDateTime.isUtilDate(): Date {
+    return Date.from(this.atZone(ZoneId.systemDefault()).toInstant())
+}
 
 fun LocalDateTime.isToday(): Boolean {
     val midnight = getMidnightOfToday()
@@ -34,4 +36,8 @@ fun LocalDateTime.diffDaysFromNow(): Long {
 fun getMidnightOfToday(): LocalDateTime {
     val now = LocalDateTime.now()
     return LocalDateTime.of(now.year, now.month, now.dayOfMonth, 0, 0, 0)
+}
+
+fun LocalDateTime.getMondayOfCurrentWeek(): LocalDateTime {
+    return this.with(DayOfWeek.MONDAY)
 }

@@ -1,9 +1,8 @@
 package com.leaf.lolground.infrastructure.api.lol.league
 
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.leaf.lolground.infrastructure.api.lol.league.dto.League
 import com.leaf.lolground.infrastructure.api.lol.summoner.dto.Summoner
+import com.leaf.lolground.infrastructure.helper.parseJsonList
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
@@ -51,8 +50,7 @@ class LeagueApi(
 
         return response.body()?.let {
             logger.info("[API request] findLeagueBySummoner: OK, summonerId: $summonerId")
-            val mapper = jacksonObjectMapper()
-            mapper.readValue(it, object: TypeReference<List<League>>() {})
+            it.parseJsonList()
         }?: throw RuntimeException("[API error] findLeagueBySummoner: body is null, summonerId: $summonerId")
     }
 

@@ -24,13 +24,14 @@ class SummonerServiceTest: BehaviorSpec({
 
     val fixture = kotlinFixture()
 
-    given("Summoner 조회 - 정상") {
+    given("findSummonerInfo - 정상") {
         val summonerName = "1leaf"
         val summonerId = fixture<String>()
+        val puuid = "puuid"
         val summoner: Summoner? = fixture<Summoner> {
             property(Summoner::id) { summonerId }
-            property(Summoner::puuid) { "puuid" }
-            property(Summoner::name) { "1leaf" }
+            property(Summoner::puuid) { puuid }
+            property(Summoner::name) { summonerName }
         }
 
         val leagueList = listOf(
@@ -41,8 +42,8 @@ class SummonerServiceTest: BehaviorSpec({
         )
 
         every { summonerApi.findSummonerWithCache(summonerName) } answers { summoner }
-        coEvery { leagueApi.findLeagueListBySummoner(summoner!!.id) } answers { leagueList }
-        every { summonerFactory.createSummonerDto(any(), any()) } answers { SummonerDto(puuid = "puuid") }
+        coEvery { leagueApi.findLeagueListBySummoner(summonerId) } answers { leagueList }
+        every { summonerFactory.createSummonerDto(any(), any()) } answers { SummonerDto(puuid = puuid) }
 
         `when`("when") {
             val result = sut.findSummonerInfo(summonerName)
@@ -51,6 +52,21 @@ class SummonerServiceTest: BehaviorSpec({
                 verify(exactly = 1) { summonerApi.findSummonerWithCache(summonerName) }
                 coVerify(exactly = 1) { leagueApi.findLeagueListBySummoner(summonerId) }
                 result!!.puuid shouldBe "puuid"
+            }
+        }
+    }
+
+    given("findSummonerInfo - Summoner 가 없는 경우") {
+        val summonerName = "1leaf"
+        every { summonerApi.findSummonerWithCache(summonerName) } answers { null }
+
+        `when`("when") {
+            val result = sut.findSummonerInfo(summonerName)
+
+            then("then") {
+                verify(exactly = 1) { summonerApi.findSummonerWithCache(any()) }
+                coVerify(exactly = 0) { leagueApi.findLeagueListBySummoner(any()) }
+                result shouldBe null
             }
         }
     }

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.leaf.lolground.infrastructure.helper.getMidnightOfToday
+import com.leaf.lolground.infrastructure.helper.getMondayOfCurrentWeek
 import com.leaf.lolground.infrastructure.helper.toLocalDateTime
-import java.time.DayOfWeek
 import java.util.*
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -22,7 +22,7 @@ data class MatchInfo(
 
     fun isThisWeek(): Boolean {
         val nowMidnight = getMidnightOfToday()
-        val thisMonday = nowMidnight.with(DayOfWeek.MONDAY)
+        val thisMonday = nowMidnight.getMondayOfCurrentWeek()
         return gameStartTime.toLocalDateTime().isAfter(thisMonday)
     }
 }

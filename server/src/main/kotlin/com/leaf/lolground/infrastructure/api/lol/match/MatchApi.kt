@@ -1,9 +1,9 @@
 package com.leaf.lolground.infrastructure.api.lol.match
 
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.leaf.lolground.infrastructure.api.lol.match.constants.QueueId
 import com.leaf.lolground.infrastructure.api.lol.match.dto.Match
+import com.leaf.lolground.infrastructure.helper.parseJson
+import com.leaf.lolground.infrastructure.helper.parseJsonList
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
@@ -35,11 +35,11 @@ class MatchApi(
     lateinit var apiToken: String
 
     @CircuitBreaker(name = "findMatchIdList", fallbackMethod = "fallbackFindMatchIdList")
-    suspend fun findMatchIdList(puuid: String): List<String> {
+    suspend fun findMatchIdList(puuid: String, start: Int = 0, count: Int = 5): List<String> {
         val uri = UriComponentsBuilder.fromHttpUrl(endpoint)
             .path(findMatchIdListUrl)
-            .queryParam("start", 0)
-            .queryParam("count", 5)
+            .queryParam("start", start)
+            .queryParam("count", count)
             .queryParam("queue", QueueId.SOLO_RANK.id)
             .build(puuid)
 
@@ -59,8 +59,7 @@ class MatchApi(
 
         return response.body()?.let {
             logger.info("[API request] findMatchIdList OK, puuid: $puuid")
-            val mapper = jacksonObjectMapper()
-            mapper.readValue(it, object: TypeReference<List<String>>() {})
+            it.parseJsonList()
         }?: throw RuntimeException("[API error] findMatchIdList: body is null, puuid: $puuid")
     }
 
@@ -92,9 +91,8 @@ class MatchApi(
 
         return response.body()?.let {
             logger.info("[API request] findMatch OK, matchId: $matchId")
-            val mapper = jacksonObjectMapper()
-            mapper.readValue(it, Match::class.java)
-        }?: throw RuntimeException("[API error] findMatch: body is null, matchId: $matchId")
+            it.parseJson()
+        } ?: throw RuntimeException("[API error] findMatch: body is null, matchId: $matchId")
     }
 
     fun fallbackFindMatch(e: Throwable): Match? {
@@ -102,7 +100,7 @@ class MatchApi(
         return null
     }
 
-    @Scheduled(fixedRateString = (1000 * 60 * 60 * 24 * 3).toString())
+    @Scheduled(fixedRateString = (1000 * 60 * 60 * 24 * 3).toString()) // 3days
     @CacheEvict(value = ["match"], allEntries = true)
     fun evictMatch(): Unit {
         logger.info("Evict cache: match")
