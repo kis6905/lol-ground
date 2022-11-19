@@ -2,10 +2,7 @@
   <v-container>
     <DivisionTitle>Registration</DivisionTitle>
     <div class="division-content">
-      <Registration
-        @registraionSummoner="registraionSummoner"
-        :summonerNames="summonerNames"
-      />
+      <Registration :summonerNames="summonerNames" />
     </div>
     <DivisionTitle>Members</DivisionTitle>
     <div class="division-content">
@@ -22,7 +19,7 @@
         <v-icon
           class="ml-2"
           icon="mdi-close"
-          @click="removeSummoner(summonerName)"
+          @click="store.removeSummoner(summonerName)"
         />
       </v-chip>
     </div>
@@ -42,134 +39,23 @@
 import DivisionTitle from "../components/DivisionTitle.vue";
 import Information from "../components/Information.vue";
 import Registration from "../components/Registration.vue";
-import { ref, onBeforeMount, reactive } from "vue";
+import { ref, onBeforeMount } from "vue";
 
-let summonerNames = ref([]);
+import { useSummonerStore } from "../store/summoner";
+import { storeToRefs } from "pinia";
 
-const summonerDetailList = ref([
-  {
-    summonerName: "1LEAF",
-    soloTier: "BRONZE",
-    soloRank: "IV",
-    soloLeaguePoints: 0,
-    soloWins: 26,
-    soloLosses: 20,
-    freeTier: "GOLD",
-    freeRank: "II",
-    freeLeaguePoints: 43,
-    freeWins: 178,
-    freeLosses: 178,
-    soloWinRate: "56.52",
-    freeWinRate: "50.00",
-    recentMatches: [
-      { win: true, playedAgo: "10d" },
-      { win: true, playedAgo: "10d" },
-      { win: true, playedAgo: "10d" },
-      { win: true, playedAgo: "10d" },
-      { win: true, playedAgo: "10d" },
-    ],
-  },
-  {
-    summonerName: "신월동불주먹",
-    soloTier: "PLATINUM",
-    soloRank: "III",
-    soloLeaguePoints: 1,
-    soloWins: 35,
-    soloLosses: 46,
-    freeTier: "BRONZE",
-    freeRank: "II",
-    freeLeaguePoints: 33,
-    freeWins: 300,
-    freeLosses: 400,
-    soloWinRate: "30.00",
-    freeWinRate: "40.00",
-    recentMatches: [
-      { win: true, playedAgo: "10d" },
-      { win: false, playedAgo: "10d" },
-      { win: true, playedAgo: "10d" },
-      { win: true, playedAgo: "10d" },
-      { win: true, playedAgo: "10d" },
-    ],
-  },
-  {
-    summonerName: "신월동불주먹",
-    soloTier: "SILVER",
-    soloRank: "III",
-    soloLeaguePoints: 1,
-    soloWins: 35,
-    soloLosses: 46,
-    freeTier: "BRONZE",
-    freeRank: "II",
-    freeLeaguePoints: 33,
-    freeWins: 300,
-    freeLosses: 400,
-    soloWinRate: "30.00",
-    freeWinRate: "40.00",
-    recentMatches: [
-      { win: true, playedAgo: "10d" },
-      { win: true, playedAgo: "10d" },
-      { win: false, playedAgo: "10d" },
-      { win: true, playedAgo: "10d" },
-      { win: true, playedAgo: "10d" },
-    ],
-  },
-  {
-    summonerName: "신월동불주먹",
-    soloTier: "GOLD",
-    soloRank: "III",
-    soloLeaguePoints: 1,
-    soloWins: 35,
-    soloLosses: 46,
-    freeTier: "BRONZE",
-    freeRank: "II",
-    freeLeaguePoints: 33,
-    freeWins: 300,
-    freeLosses: 400,
-    soloWinRate: "30.00",
-    freeWinRate: "40.00",
-    recentMatches: [
-      { win: true, playedAgo: "10d" },
-      { win: false, playedAgo: "10d" },
-      { win: true, playedAgo: "10d" },
-      { win: false, playedAgo: "10d" },
-      { win: true, playedAgo: "10d" },
-    ],
-  },
-]);
+const store = useSummonerStore();
 
-function removeSummoner(summonerName) {
-  // console.log("removeSummoner!", summonerName);
-  summonerNames.value = summonerNames.value.filter(
-    (name) => name != summonerName
-  );
-}
+const { summonerNames, summonerDetailList } = storeToRefs(store);
 
-function registraionSummoner(summonerName) {
-  // console.log("registraionSummoner!", summonerName);
-}
 onBeforeMount(async () => {
-  console.log("onBeforeMount");
-
-  summonerNames.value = JSON.parse(localStorage.getItem("summonerNames"));
-  // localStorage.setItem("summonerNames");
-  console.log("this.summonerNames : ", summonerNames.value);
-  if (summonerNames.value) {
+  const localStorageSummonerNames = store.getLocalStorageSummonerNames();
+  if (localStorageSummonerNames && localStorageSummonerNames.length > 0) {
+    store.setSummonerNames(localStorageSummonerNames);
     return;
   }
-
-  localStorage.setItem(
-    "summonerNames",
-    JSON.stringify([
-      "Develeaf",
-      "세훈이에요",
-      "퐁대전설",
-      "정치위원장",
-      "RIAN",
-      "PororiS2",
-    ])
-  );
-
-  summonerNames.value = JSON.parse(localStorage.getItem("summonerNames"));
+  store.initSummonerNames();
+  localStorage.setItem("summonerNames", JSON.stringify(summonerNames.value));
 
   // https://kr.api.riotgames.com/lol/summoner/v4/summoners/by-name/develeaf
 

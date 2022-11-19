@@ -69,11 +69,7 @@ const props = defineProps({
   summonerDetail: Object,
 });
 
-onBeforeMount(() => {
-  // console.log("onBeforeMount", tierConstants.silver);
-  // console.log("summonerDetail", props.summonerDetail);
-  // console.log("color", tierConstants[props.summonerDetail.soloTier].color);
-});
+onBeforeMount(() => {});
 </script>
 
 <style lang="scss" scoped>

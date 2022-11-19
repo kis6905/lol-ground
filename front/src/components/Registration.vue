@@ -8,6 +8,7 @@
       clearable
       full-width
       hide-details
+      @keyup.enter="registSummoner"
     ></v-text-field>
     <v-btn
       rounded="lg"
@@ -21,24 +22,19 @@
 </template>
 
 <script setup>
-import { ref, defineEmits, onBeforeMount } from "vue";
-let props = defineProps({
-  summonerNames: Array,
-});
-let summonerName = ref("");
-const emit = defineEmits(["registraionSummoner"]);
+import { ref, onBeforeMount } from "vue";
+import { useSummonerStore } from "../store/summoner";
+import { storeToRefs } from "pinia";
+
+const store = useSummonerStore();
+const { summonerNames, summonerDetailList } = storeToRefs(store);
+
+const summonerName = ref("");
 
 const registSummoner = () => {
-  const value = summonerName.value.trim();
-  if (value && !props.summonerNames.includes(value)) {
-    props.summonerNames.push(value);
-    localStorage.setItem("summonerNames", JSON.stringify(props.summonerNames));
-  }
+  store.registraionSummoner(summonerName.value);
   summonerName.value = "";
 };
 
-onBeforeMount(() => {
-  // console.log("registraion onBeforeMount");
-  // emit("registraionSummoner", summonerName);
-});
+onBeforeMount(() => {});
 </script>
