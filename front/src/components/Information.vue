@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div v-if="summoner.summonerName">
     <v-card
-      :color="tierConstants[props.summonerDetail.soloTier].color"
+      :color="tierConstants[summoner.soloTier].color"
       theme="dark"
       class="mt-2"
     >
       <v-toolbar density="compact" color="#0000004a">
         <v-toolbar-title class="text-subtitle-1">
-          {{ props.summonerDetail.summonerName }}
+          {{ summoner.summonerName }}
         </v-toolbar-title>
       </v-toolbar>
 
@@ -18,31 +18,30 @@
               <v-avatar size="90">
                 <v-img
                   class="img-box"
-                  :src="tierConstants[props.summonerDetail.soloTier].image"
+                  :src="tierConstants[summoner.soloTier].image"
                   max-width="80%"
                 ></v-img>
               </v-avatar>
               <p class="pt-5">
                 {{
-                  `${props.summonerDetail.soloTier} ${props.summonerDetail.soloRank}`
+                  `${summoner.soloTier} ${summoner.soloRank}`
                 }}
               </p>
             </div>
           </v-col>
           <v-col cols="7">
-            <p>{{ `${props.summonerDetail.soloLeaguePoints} LP` }}</p>
+            <p>{{ `${summoner.soloLeaguePoints} LP` }}</p>
             <p>
               {{
-                `${props.summonerDetail.soloWins}승 ${props.summonerDetail.soloLosses}패`
+                `${summoner.soloWins}승 ${summoner.soloLosses}패`
               }}
             </p>
-            <p>{{ `승률 ${props.summonerDetail.soloWinRate}%` }}</p>
+            <p>{{ `승률 ${summoner.soloWinRate}%` }}</p>
             <p>이번주 게임 수 10</p>
             <p>최근 솔랭 전적</p>
             <div class="d-flex">
               <div
-                v-for="(recentMatch, index) in props.summonerDetail
-                  .recentMatches"
+                v-for="(recentMatch, index) in summoner.recentMatches"
                 :key="index"
                 class="lates-record-box"
               >
@@ -63,13 +62,32 @@
 
 <script setup>
 import tierConstants from "../constants/tierConstants";
-import { onBeforeMount } from "vue";
+import { ref, onBeforeMount } from "vue";
+import { useSummonerStore } from "../store/summoner";
+
+const summonerStore = useSummonerStore();
 
 const props = defineProps({
-  summonerDetail: Object,
+  summonerName: String,
 });
 
-onBeforeMount(() => {});
+const summoner = ref({});
+const matchInfo = ref({});
+
+onBeforeMount(async () => {
+  try {
+    const summonerResponse = await fetch(`/api/summoner/${props.summonerName}`);
+    const data = await summonerResponse.json();
+    summoner.value = data;
+
+    const matchInfoResponse = await fetch(`/api/match/info/${data.puuid}`);
+
+  } catch (e) {
+    console.error(e);
+    summonerStore.removeSummoner(props.summonerName);
+    // TODO: toast 로 알려주기
+  }
+});
 </script>
 
 <style lang="scss" scoped>

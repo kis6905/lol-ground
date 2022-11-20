@@ -26,13 +26,13 @@ import { ref, onBeforeMount } from "vue";
 import { useSummonerStore } from "../store/summoner";
 import { storeToRefs } from "pinia";
 
-const store = useSummonerStore();
-const { summonerNames, summonerDetailList } = storeToRefs(store);
+const summonerStore = useSummonerStore();
+const { summonerNames } = storeToRefs(summonerStore);
 
 const summonerName = ref("");
 
 const registSummoner = () => {
-  store.registraionSummoner(summonerName.value);
+  summonerStore.registerSummoner(summonerName.value);
   summonerName.value = "";
 };
 
