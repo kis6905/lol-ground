@@ -16,11 +16,11 @@ class MatchFactory {
         val diffMinutes = gameStartTime.diffMinutesFromNow()
         val diffHours = gameStartTime.diffHoursFromNow()
         val playedAgo = if (diffMinutes < 60) {
-            "$diffMinutes 분"
+            "${diffMinutes}m"
         } else if (diffHours < 24) {
-            "$diffHours 시간"
+            "${diffHours}h"
         } else {
-            "${gameStartTime.diffDaysFromNow()} 일"
+            "${gameStartTime.diffDaysFromNow()}d"
         }
 
         return RecentMatch(

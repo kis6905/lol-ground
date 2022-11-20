@@ -80,9 +80,7 @@ onBeforeMount(async () => {
     const summonerData = await summonerResponse.json();
     summoner.value = summonerData;
 
-    const matchInfoResponse = await fetch(
-      `/api/match/info/${summonerData.puuid}`
-    );
+    const matchInfoResponse = await fetch(`/api/match/info/${summonerData.puuid}`);
     const matchInfoData = await matchInfoResponse.json();
     matchInfo.value = matchInfoData;
   } catch (e) {

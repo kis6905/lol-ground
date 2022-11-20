@@ -23,7 +23,9 @@ class MatchService(
 
         val matchList: List<Match?> = matchIdList.map {
             val matchDef = async { findMatchWithCache(it) }
-            matchDef.await()
+            val match = matchDef.await()
+            Thread.sleep(250) // Riot API Limit 으로 인해 sleep
+            match
         }
 
         val playedGameCountOfThisWeek = matchList
