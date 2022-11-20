@@ -23,25 +23,23 @@
                 ></v-img>
               </v-avatar>
               <p class="pt-5">
-                {{
-                  `${summoner.soloTier} ${summoner.soloRank}`
-                }}
+                {{ `${summoner.soloTier} ${summoner.soloRank}` }}
               </p>
             </div>
           </v-col>
           <v-col cols="7">
             <p>{{ `${summoner.soloLeaguePoints} LP` }}</p>
             <p>
-              {{
-                `${summoner.soloWins}승 ${summoner.soloLosses}패`
-              }}
+              {{ `${summoner.soloWins}승 ${summoner.soloLosses}패` }}
             </p>
             <p>{{ `승률 ${summoner.soloWinRate}%` }}</p>
-            <p>이번주 게임 수 10</p>
+            <p>
+              {{ `이번주 게임 수 ${matchInfo.playedGameCountOfThisWeek}` }}
+            </p>
             <p>최근 솔랭 전적</p>
             <div class="d-flex">
               <div
-                v-for="(recentMatch, index) in summoner.recentMatches"
+                v-for="(recentMatch, index) in matchInfo.recentMatches"
                 :key="index"
                 class="lates-record-box"
               >
@@ -74,18 +72,23 @@ const props = defineProps({
 const summoner = ref({});
 const matchInfo = ref({});
 
+const emit = defineEmits(["onSnackbar"]);
+
 onBeforeMount(async () => {
   try {
     const summonerResponse = await fetch(`/api/summoner/${props.summonerName}`);
-    const data = await summonerResponse.json();
-    summoner.value = data;
+    const summonerData = await summonerResponse.json();
+    summoner.value = summonerData;
 
-    const matchInfoResponse = await fetch(`/api/match/info/${data.puuid}`);
-
+    const matchInfoResponse = await fetch(
+      `/api/match/info/${summonerData.puuid}`
+    );
+    const matchInfoData = await matchInfoResponse.json();
+    matchInfo.value = matchInfoData;
   } catch (e) {
     console.error(e);
     summonerStore.removeSummoner(props.summonerName);
-    // TODO: toast 로 알려주기
+    emit("onSnackbar", props.summonerName);
   }
 });
 </script>
