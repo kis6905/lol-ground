@@ -1,5 +1,6 @@
 package com.leaf.lolground.infrastructure.api.lol.match
 
+import com.leaf.lolground.infrastructure.api.lol.BaseLoLApi
 import com.leaf.lolground.infrastructure.api.lol.match.constants.QueueId
 import com.leaf.lolground.infrastructure.api.lol.match.dto.Match
 import com.leaf.lolground.infrastructure.helper.parseJson
@@ -23,7 +24,7 @@ private val logger = KotlinLogging.logger {}
 @Repository
 class MatchApi(
     val httpClient: HttpClient,
-) {
+): BaseLoLApi() {
     companion object {
         const val findMatchIdListUrl = "/lol/match/v5/matches/by-puuid/{puuid}/ids"
         const val findMatchUrl = "/lol/match/v5/matches/{matchId}"
@@ -31,8 +32,6 @@ class MatchApi(
 
     @Value("\${lol.api.endpoint.match}")
     lateinit var endpoint: String
-    @Value("\${lol.api.token}")
-    lateinit var apiToken: String
 
     @CircuitBreaker(name = "findMatchIdList", fallbackMethod = "fallbackFindMatchIdList")
     suspend fun findMatchIdList(puuid: String, start: Int = 0, count: Int = 5): List<String> {
@@ -45,10 +44,10 @@ class MatchApi(
 
         logger.info("[API request] findMatchIdList: puuid: $puuid, uri: $uri")
 
-        val request: HttpRequest = HttpRequest.newBuilder()
+        val request: HttpRequest = makeHttpRequestBuilder()
             .uri(uri)
             .GET()
-            .header("X-Riot-Token", apiToken)
+            .header(API_TOKEN_HEADER_NAME, apiToken)
             .build()
 
         val response: HttpResponse<String> = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
@@ -77,10 +76,10 @@ class MatchApi(
 
         logger.info("[API request] findMatch: matchId: $matchId, uri: $uri")
 
-        val request: HttpRequest = HttpRequest.newBuilder()
+        val request: HttpRequest = makeHttpRequestBuilder()
             .uri(uri)
             .GET()
-            .header("X-Riot-Token", apiToken)
+            .header(API_TOKEN_HEADER_NAME, apiToken)
             .build()
 
         val response: HttpResponse<String> = httpClient.send(request, HttpResponse.BodyHandlers.ofString())

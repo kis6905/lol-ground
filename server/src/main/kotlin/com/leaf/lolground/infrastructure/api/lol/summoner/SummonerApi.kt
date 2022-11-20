@@ -1,5 +1,6 @@
 package com.leaf.lolground.infrastructure.api.lol.summoner
 
+import com.leaf.lolground.infrastructure.api.lol.BaseLoLApi
 import com.leaf.lolground.infrastructure.api.lol.summoner.dto.Summoner
 import com.leaf.lolground.infrastructure.helper.parseJson
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
@@ -20,15 +21,13 @@ private val logger = KotlinLogging.logger {}
 @Repository
 class SummonerApi(
     val httpClient: HttpClient,
-) {
+): BaseLoLApi() {
     companion object {
         const val findSummonerUrl = "/lol/summoner/v4/summoners/by-name/{summonerName}"
     }
 
     @Value("\${lol.api.endpoint.summoner}")
     lateinit var endpoint: String
-    @Value("\${lol.api.token}")
-    lateinit var apiToken: String
 
     @Cacheable(value = ["summoner"], key = "#summonerName", unless = "#result == null")
     @CircuitBreaker(name = "findSummoner", fallbackMethod = "fallbackFindSummoner")
@@ -39,10 +38,10 @@ class SummonerApi(
 
         logger.info("[API request] findSummoner: summonerName: $summonerName, uri: $uri")
 
-        val request: HttpRequest = HttpRequest.newBuilder()
+        val request: HttpRequest = makeHttpRequestBuilder()
             .uri(uri)
             .GET()
-            .header("X-Riot-Token", apiToken)
+            .header(API_TOKEN_HEADER_NAME, apiToken)
             .build()
 
         val response: HttpResponse<String> = httpClient.send(request, HttpResponse.BodyHandlers.ofString())

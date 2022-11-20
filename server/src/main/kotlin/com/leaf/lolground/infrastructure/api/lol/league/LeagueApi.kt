@@ -1,5 +1,6 @@
 package com.leaf.lolground.infrastructure.api.lol.league
 
+import com.leaf.lolground.infrastructure.api.lol.BaseLoLApi
 import com.leaf.lolground.infrastructure.api.lol.league.dto.League
 import com.leaf.lolground.infrastructure.api.lol.summoner.dto.Summoner
 import com.leaf.lolground.infrastructure.helper.parseJsonList
@@ -18,15 +19,13 @@ private val logger = KotlinLogging.logger {}
 @Repository
 class LeagueApi(
     val httpClient: HttpClient,
-) {
+): BaseLoLApi() {
     companion object {
         const val findLeagueBySummonerUrl = "/lol/league/v4/entries/by-summoner/{summonerId}"
     }
 
     @Value("\${lol.api.endpoint.league}")
     lateinit var endpoint: String
-    @Value("\${lol.api.token}")
-    lateinit var apiToken: String
 
     @CircuitBreaker(name = "findLeagueBySummoner", fallbackMethod = "fallbackFindLeagueBySummoner")
     suspend fun findLeagueListBySummoner(summonerId: String): List<League> {
@@ -36,10 +35,10 @@ class LeagueApi(
 
         logger.info("[API request] findLeagueBySummoner: summonerId: $summonerId, uri: $uri")
 
-        val request: HttpRequest = HttpRequest.newBuilder()
+        val request: HttpRequest = makeHttpRequestBuilder()
             .uri(uri)
             .GET()
-            .header("X-Riot-Token", apiToken)
+            .header(API_TOKEN_HEADER_NAME, apiToken)
             .build()
 
         val response: HttpResponse<String> = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
