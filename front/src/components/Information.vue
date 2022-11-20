@@ -72,7 +72,7 @@ const props = defineProps({
 const summoner = ref({});
 const matchInfo = ref({});
 
-const emit = defineEmits(["onSnackbar"]);
+const emit = defineEmits(["showSnackbar"]);
 
 onBeforeMount(async () => {
   try {
@@ -88,7 +88,7 @@ onBeforeMount(async () => {
   } catch (e) {
     console.error(e);
     summonerStore.removeSummoner(props.summonerName);
-    emit("onSnackbar", props.summonerName);
+    emit("showSnackbar", props.summonerName);
   }
 });
 </script>

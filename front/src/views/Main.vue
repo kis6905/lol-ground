@@ -30,7 +30,7 @@
         v-for="summonerName in summonerNames"
         :key="summonerName"
         :summonerName="summonerName"
-        @onSnackbar="onSnackbar"
+        @showSnackbar="showSnackbar"
       />
     </div>
     <!-- snackbar -->
@@ -59,7 +59,7 @@ const isShowSnackbar = ref(false);
 const snackbarText = ref("");
 const snackbarTimeout = ref(2000);
 
-const onSnackbar = (summonerName) => {
+const showSnackbar = (summonerName) => {
   isShowSnackbar.value = true;
   snackbarText.value = `"${summonerName}" 은 존재하지 않는 사용자입니다.`;
 };
