@@ -13,7 +13,7 @@
     <v-btn
       rounded="lg"
       icon="mdi-plus"
-      color="primary"
+      color="gray"
       size="small"
       min-width="40"
       @click="registSummoner"
@@ -30,7 +30,6 @@ const summonerStore = useSummonerStore();
 const { summonerNames } = storeToRefs(summonerStore);
 
 const summonerName = ref("");
-
 const registSummoner = () => {
   summonerStore.registerSummoner(summonerName.value);
   summonerName.value = "";

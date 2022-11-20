@@ -30,8 +30,16 @@
         v-for="summonerName in summonerNames"
         :key="summonerName"
         :summonerName="summonerName"
+        @showSnackbar="showSnackbar"
       />
     </div>
+    <!-- snackbar -->
+    <v-snackbar v-model="isShowSnackbar" :timeout="snackbarTimeout" color="red">
+      {{ snackbarText }}
+      <template v-slot:actions>
+        <v-icon class="ml-2" icon="mdi-close" @click="isShowSnackbar = false" />
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -46,6 +54,15 @@ import { storeToRefs } from "pinia";
 
 const summonerStore = useSummonerStore();
 const { summonerNames, summonerDetailList } = storeToRefs(summonerStore);
+
+const isShowSnackbar = ref(false);
+const snackbarText = ref("");
+const snackbarTimeout = ref(2000);
+
+const showSnackbar = (summonerName) => {
+  isShowSnackbar.value = true;
+  snackbarText.value = `"${summonerName}" 은 존재하지 않는 사용자입니다.`;
+};
 
 onBeforeMount(() => {
   summonerStore.initSummonerNames();
