@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, onBeforeMount, reactive, computed } from "vue";
+import { ref } from "vue";
 
 export const useSummonerStore = defineStore('summonerStore', () => {
     const summonerNames = ref();
@@ -23,11 +23,6 @@ export const useSummonerStore = defineStore('summonerStore', () => {
       // default
       summonerNames.value = [
         "Develeaf",
-        "세훈이에요",
-        "퐁대전설",
-        "정치위원장",
-        "RIAN",
-        "PororiS2",
       ];
     }
 
