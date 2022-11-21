@@ -8,7 +8,7 @@ export default Object.freeze({
     image: 'https://opgg-static.akamaized.net/images/medals_new/silver.png'
   }),
   GOLD: Object.freeze({
-    color: '#5e550154',
+    color: '#654f1075',
     image: 'https://opgg-static.akamaized.net/images/medals_new/gold.png'
   }),
   PLATINUM: Object.freeze({
