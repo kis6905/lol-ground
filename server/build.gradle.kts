@@ -51,3 +51,7 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
+
+tasks.getByName<Jar>("jar") {
+    enabled = false
+}
