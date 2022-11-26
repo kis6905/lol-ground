@@ -6,7 +6,7 @@ LoL Members 전적을 쉽게 보기 위해 시작한 프로젝트
 
 ---
 ## Link
-https://returntrue.tk/
+<a href="https://returntrue.tk/" target="_blank">https://returntrue.tk/</a>
 
 <br/>
 
