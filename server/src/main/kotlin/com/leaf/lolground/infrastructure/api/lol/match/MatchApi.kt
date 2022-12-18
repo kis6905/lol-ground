@@ -34,7 +34,7 @@ class MatchApi(
     lateinit var endpoint: String
 
     @CircuitBreaker(name = "findMatchIdList", fallbackMethod = "fallbackFindMatchIdList")
-    suspend fun findMatchIdList(puuid: String, start: Int = 0, count: Int = 5): List<String> {
+    fun findMatchIdList(puuid: String, start: Int = 0, count: Int = 5): List<String> {
         val uri = UriComponentsBuilder.fromHttpUrl(endpoint)
             .path(findMatchIdListUrl)
             .queryParam("start", start)
@@ -69,7 +69,7 @@ class MatchApi(
 
     @Cacheable(value = ["match"], key = "#matchId", unless = "#result == null")
     @CircuitBreaker(name = "findMatch", fallbackMethod = "fallbackFindMatch")
-    fun findMatchWithCache(matchId: String): Match? {
+    fun findMatch(matchId: String): Match? {
         val uri = UriComponentsBuilder.fromHttpUrl(endpoint)
             .path(findMatchUrl)
             .build(matchId)
@@ -99,9 +99,9 @@ class MatchApi(
         return null
     }
 
-    @Scheduled(fixedRateString = (1000 * 60 * 60 * 24 * 3).toString()) // 3days
+    @Scheduled(fixedRateString = (1000 * 60 * 60 * 24 * 10).toString()) // 10days
     @CacheEvict(value = ["match"], allEntries = true)
-    fun evictMatch(): Unit {
+    fun evictMatch() {
         logger.info("Evict cache: match")
     }
 }

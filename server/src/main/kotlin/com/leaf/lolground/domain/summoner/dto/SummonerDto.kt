@@ -13,6 +13,7 @@ data class SummonerDto(
     val freeLeaguePoints: Int = 0,
     val freeWins: Int = 0,
     val freeLosses: Int = 0,
+    var lastRefreshedAgo: String = "",
 ) {
     var soloWinRate: String = "0"
         get() {

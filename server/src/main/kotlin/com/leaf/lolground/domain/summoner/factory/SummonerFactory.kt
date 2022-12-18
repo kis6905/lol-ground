@@ -25,7 +25,7 @@ class SummonerFactory {
             freeRank = freeLeague?.rank.orEmpty(),
             freeLeaguePoints = freeLeague?.leaguePoints ?: 0,
             freeWins = freeLeague?.wins ?: 0,
-            freeLosses = freeLeague?.losses ?: 0
+            freeLosses = freeLeague?.losses ?: 0,
         )
     }
 }

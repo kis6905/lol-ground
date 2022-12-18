@@ -41,3 +41,18 @@ fun getMidnightOfToday(): LocalDateTime {
 fun LocalDateTime.getMondayOfCurrentWeek(): LocalDateTime {
     return this.with(DayOfWeek.MONDAY)
 }
+
+fun LocalDateTime?.diffFormattedStringFromNow(): String {
+    if (this == null) {
+        return "0m"
+    }
+    val diffMinutes = this.diffMinutesFromNow()
+    val diffHours = this.diffHoursFromNow()
+    return if (diffMinutes < 60) {
+        "${diffMinutes}m"
+    } else if (diffHours < 24) {
+        "${diffHours}h"
+    } else {
+        "${this.diffDaysFromNow()}d"
+    }
+}

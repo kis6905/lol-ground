@@ -2,7 +2,6 @@ package com.leaf.lolground.infrastructure.api.lol.league
 
 import com.leaf.lolground.infrastructure.api.lol.BaseLoLApi
 import com.leaf.lolground.infrastructure.api.lol.league.dto.League
-import com.leaf.lolground.infrastructure.api.lol.summoner.dto.Summoner
 import com.leaf.lolground.infrastructure.helper.parseJsonList
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker
 import mu.KotlinLogging
@@ -28,7 +27,7 @@ class LeagueApi(
     lateinit var endpoint: String
 
     @CircuitBreaker(name = "findLeagueBySummoner", fallbackMethod = "fallbackFindLeagueBySummoner")
-    suspend fun findLeagueListBySummoner(summonerId: String): List<League> {
+    fun findLeagueListBySummoner(summonerId: String): List<League> {
         val uri = UriComponentsBuilder.fromHttpUrl(endpoint)
             .path(findLeagueBySummonerUrl)
             .build(summonerId)
@@ -53,8 +52,8 @@ class LeagueApi(
         }?: throw RuntimeException("[API error] findLeagueBySummoner: body is null, summonerId: $summonerId")
     }
 
-    fun fallbackFindLeagueBySummoner(e: Throwable): Summoner {
+    fun fallbackFindLeagueBySummoner(e: Throwable): List<League> {
         logger.error("[API fallback] findLeagueBySummoner", e)
-        return Summoner.empty()
+        return emptyList()
     }
 }

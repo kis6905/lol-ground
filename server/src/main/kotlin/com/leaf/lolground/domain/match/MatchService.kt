@@ -7,6 +7,8 @@ import com.leaf.lolground.infrastructure.api.lol.match.dto.Match
 import com.leaf.lolground.infrastructure.helper.withBlockAndIOContext
 import kotlinx.coroutines.async
 import mu.KotlinLogging
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 
 private val logger = KotlinLogging.logger {}
@@ -17,15 +19,15 @@ class MatchService(
     val matchFactory: MatchFactory,
 ) {
 
+    @Cacheable(value = ["matchInfo"], key = "#puuid", unless = "#result == null")
     fun findMatchInfo(puuid: String): MatchDto = withBlockAndIOContext co@{
         val matchIdListDef = async { matchApi.findMatchIdList(puuid) }
         val matchIdList = matchIdListDef.await()
 
         val matchList: List<Match?> = matchIdList.map {
-            val matchDef = async { findMatchWithCache(it) }
-            val match = matchDef.await()
             Thread.sleep(250) // Riot API Limit 으로 인해 sleep
-            match
+            val matchDef = async { matchApi.findMatch(it) }
+            matchDef.await()
         }
 
         val playedGameCountOfThisWeek = matchList
@@ -42,7 +44,9 @@ class MatchService(
         )
     }
 
-    suspend fun findMatchWithCache(matchId: String): Match? =
-        matchApi.findMatchWithCache(matchId)
+    @CacheEvict(value = ["matchInfo"], key = "#puuid", allEntries = false)
+    fun evictMatchInfo(puuid: String) {
+        logger.info("Evict cache: matchInfo, puuid: $puuid")
+    }
 
 }

@@ -9,10 +9,8 @@ import com.leaf.lolground.infrastructure.api.lol.match.dto.MatchInfo
 import com.leaf.lolground.infrastructure.helper.isUtilDate
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import java.time.LocalDateTime
 
 class MatchServiceTest: BehaviorSpec({
@@ -29,8 +27,8 @@ class MatchServiceTest: BehaviorSpec({
         val past = LocalDateTime.now().minusDays(7)
 
         `when`("전부 이번주에 게임 한 경우") {
-            coEvery { matchApi.findMatchIdList(puuid) } answers { matchIdList }
-            every { matchApi.findMatchWithCache(any()) } answers {
+            every { matchApi.findMatchIdList(puuid) } answers { matchIdList }
+            every { matchApi.findMatch(any()) } answers {
                 Match(
                     matchInfo = MatchInfo(
                         gameStartTime = now.isUtilDate(),
@@ -44,14 +42,13 @@ class MatchServiceTest: BehaviorSpec({
             val result = sut.findMatchInfo(puuid)
 
             then("then") {
-                verify(exactly = matchIdList.size) { matchApi.findMatchWithCache(any()) }
                 result.playedGameCountOfThisWeek shouldBe 3
             }
         }
 
         `when`("이번주에 게임 안 한 경우") {
-            coEvery { matchApi.findMatchIdList(puuid) } answers { matchIdList }
-            every { matchApi.findMatchWithCache(any()) } answers {
+            every { matchApi.findMatchIdList(puuid) } answers { matchIdList }
+            every { matchApi.findMatch(any()) } answers {
                 Match(
                     matchInfo = MatchInfo(
                         gameStartTime = past.isUtilDate(),
@@ -64,7 +61,6 @@ class MatchServiceTest: BehaviorSpec({
             val result = sut.findMatchInfo(puuid)
 
             then("then") {
-                verify(exactly = matchIdList.size) { matchApi.findMatchWithCache(any()) }
                 result.playedGameCountOfThisWeek shouldBe 0
             }
         }

@@ -31,7 +31,7 @@ class SummonerApi(
 
     @Cacheable(value = ["summoner"], key = "#summonerName", unless = "#result == null")
     @CircuitBreaker(name = "findSummoner", fallbackMethod = "fallbackFindSummoner")
-    fun findSummonerWithCache(summonerName: String): Summoner? {
+    fun findSummoner(summonerName: String): Summoner? {
         val uri = UriComponentsBuilder.fromHttpUrl(endpoint)
             .path(findSummonerUrl)
             .build(summonerName)
@@ -61,9 +61,9 @@ class SummonerApi(
         return null
     }
 
-    @Scheduled(fixedRateString = (1000 * 60 * 60 * 24 * 3).toString()) // 3 days
+    @Scheduled(fixedRateString = (1000 * 60 * 60 * 24 * 10).toString()) // 10 days
     @CacheEvict(value = ["summoner"], allEntries = true)
-    fun evictSummoner(): Unit {
+    fun evictSummoner() {
         logger.info("Evict cache: summoner")
     }
 }
