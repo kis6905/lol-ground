@@ -1,4 +1,8 @@
 export default Object.freeze({
+  UnRanked: Object.freeze({
+    color: '#74747454',
+    image: 'https://your.gg/images/emblem/Unranked.png'
+  }),
   BRONZE: Object.freeze({
     color: '#564d4354',
     image: 'https://opgg-static.akamaized.net/images/medals_new/bronze.png'

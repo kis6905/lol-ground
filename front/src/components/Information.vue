@@ -9,6 +9,13 @@
         <v-toolbar-title class="text-subtitle-1">
           {{ summoner.summonerName }}
         </v-toolbar-title>
+        <div>
+          {{ summoner.lastRefreshedAgo }} 전
+          <v-btn
+            icon="mdi-refresh"
+            @click="handleRefresh"
+          ></v-btn>
+        </div>
       </v-toolbar>
 
       <v-card-text>
@@ -78,7 +85,18 @@ const matchInfo = ref({});
 const emit = defineEmits(["showSnackbar"]);
 const isLoading = ref(false);
 
-onBeforeMount(async () => {
+onBeforeMount(() => {
+  fetchSummoner();
+});
+
+const handleRefresh = async () => {
+  const deleteCacheResponse = await deleteCache();
+  if (deleteCacheResponse.status === 200) {
+    fetchSummoner();
+  }
+}
+
+const fetchSummoner = async () => {
   try {
     const summonerResponse = await fetch(`/api/summoner/${props.summonerName}`);
     const summonerData = await summonerResponse.json();
@@ -97,7 +115,11 @@ onBeforeMount(async () => {
     summonerStore.removeSummoner(props.summonerName);
     emit("showSnackbar", props.summonerName);
   }
-});
+}
+
+const deleteCache = () => {
+  return fetch(`/api/summoner/cache/${props.summonerName}`, { method: 'DELETE' });
+}
 </script>
 
 <style lang="scss" scoped>
