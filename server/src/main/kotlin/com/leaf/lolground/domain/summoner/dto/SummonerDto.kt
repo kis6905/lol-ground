@@ -18,13 +18,19 @@ data class SummonerDto(
     var soloWinRate: String = "0"
         get() {
             val winRate: Double = this.soloWins.toDouble() / (this.soloWins + this.soloLosses).toDouble() * 100
-            return String.format("%.2f", winRate)
+            return when (winRate.isNaN()) {
+                true -> "0"
+                else -> String.format("%.2f", winRate)
+            }
         }
 
     var freeWinRate: String = "0"
         get() {
             val winRate: Double = this.freeWins.toDouble() / (this.freeWins + this.freeLosses).toDouble() * 100
-            return String.format("%.2f", winRate)
+            return when (winRate.isNaN()) {
+                true -> "0"
+                else -> String.format("%.2f", winRate)
+            }
         }
 
     fun isEmpty(): Boolean {
