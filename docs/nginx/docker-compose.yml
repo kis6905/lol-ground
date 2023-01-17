@@ -1,0 +1,30 @@
+version: '3'
+services:
+  lol-ground:
+    container_name: lol-ground
+    image: lol-ground:latest
+    volumes:
+      - /dooleaf/lol-ground/server/logs:/dooleaf/logs
+    ports:
+      - "9090:9090"
+    networks:
+      - backend
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    restart: unless-stopped
+    volumes:
+      - /dooleaf/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /dooleaf/nginx/logs:/var/log/nginx
+      - /dooleaf/lol-ground/front:/dooleaf/lol-ground/front
+      - /etc/letsencrypt:/etc/letsencrypt
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - backend
+    depends_on:
+      - lol-ground
+networks: 
+  backend:
+    driver: bridge
