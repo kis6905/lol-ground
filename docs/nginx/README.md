@@ -12,7 +12,7 @@ $ docker-compose up &
 $ docker stop nginx
 $ docker stop lol-ground
 
-$ certbot renew
+$ sudo certbot renew
 
 $ cd /dooleaf/nginx
 $ docker-compose up &
