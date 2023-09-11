@@ -5,6 +5,8 @@ server:
   port: 9090
 
 spring:
+  application:
+    name: lolground
   output:
     ansi:
       enabled: always

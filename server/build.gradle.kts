@@ -4,8 +4,8 @@ plugins {
     kotlin("jvm") version "1.7.20"
     kotlin("plugin.spring") version "1.6.21"
     id("io.kotest") version "0.3.8"
-    id("org.springframework.boot") version "2.7.1"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
+    id("org.springframework.boot") version "2.7.6"
+    id("io.spring.dependency-management") version "1.0.15.RELEASE"
 }
 
 group = "com.leaf.lolground"
@@ -31,6 +31,12 @@ dependencies {
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.4")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4")
+
+    implementation("org.springframework.cloud:spring-cloud-starter-config:3.1.5")
+    implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:3.1.5")
+//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+//    implementation("mysql:mysql-connector-java")
+//    implementation("com.mysql:mysql-connector-j")
 
     testImplementation(kotlin("test"))
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
