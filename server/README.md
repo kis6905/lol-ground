@@ -3,7 +3,7 @@
 * local
   ```
   -Dspring.profiles.active=local
-  -Dspring.cloud.config.uri=http://localhost:9999/
+  -Dspring.cloud.config.uri=http://returntrue.tk:9999/
   ```
 * prod
   ```
