@@ -4,7 +4,7 @@ services:
     container_name: leaf-cloud-config
     image: leaf-cloud-config:latest
     volumes:
-      - /dooleaf/leaf-cloud-config/logs:/dooleaf/cloud-config/logs
+      - /dooleaf/leaf-cloud-config/logs:/dooleaf/logs/cloud-config
     ports:
       - "9999:9999"
     networks:
