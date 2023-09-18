@@ -1,5 +1,14 @@
 version: '3'
 services:
+  leaf-cloud-config:
+    container_name: leaf-cloud-config
+    image: leaf-cloud-config:latest
+    volumes:
+      - /dooleaf/leaf-cloud-config/logs:/dooleaf/cloud-config/logs
+    ports:
+      - "9999:9999"
+    networks:
+      - backend
   lol-ground:
     container_name: lol-ground
     image: lol-ground:latest
@@ -9,6 +18,8 @@ services:
       - "9090:9090"
     networks:
       - backend
+    depends_on:
+      - leaf-cloud-config
   nginx:
     container_name: nginx
     image: nginx:latest
