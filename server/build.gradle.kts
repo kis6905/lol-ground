@@ -3,9 +3,16 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("jvm") version "1.7.20"
     kotlin("plugin.spring") version "1.6.21"
+    kotlin("plugin.jpa") version "1.6.21"
     id("io.kotest") version "0.3.8"
     id("org.springframework.boot") version "2.7.6"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
+}
+
+allOpen {
+    annotation("javax.persistence.Entity")
+    annotation("javax.persistence.MappedSuperclass")
+    annotation("javax.persistence.Embeddable")
 }
 
 group = "com.leaf.lolground"
@@ -34,9 +41,8 @@ dependencies {
 
     implementation("org.springframework.cloud:spring-cloud-starter-config:3.1.5")
     implementation("org.springframework.cloud:spring-cloud-starter-bootstrap:3.1.5")
-//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//    implementation("mysql:mysql-connector-java")
-//    implementation("com.mysql:mysql-connector-j")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("com.mysql:mysql-connector-j:8.0.33")
 
     testImplementation(kotlin("test"))
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
