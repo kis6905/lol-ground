@@ -7,6 +7,7 @@ import com.leaf.lolground.infrastructure.database.app.entity.App
 import com.leaf.lolground.infrastructure.database.app.repository.AppRepository
 import com.leaf.lolground.infrastructure.exceptions.NotFoundException
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
 import io.kotest.matchers.shouldBe
 import io.mockk.every
@@ -16,6 +17,8 @@ import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.repository.findByIdOrNull
 
 class AppServiceTest: BehaviorSpec({
+    isolationMode = IsolationMode.InstancePerLeaf
+
     val appRepository = mockk<AppRepository>()
     val appFactory = mockk<AppFactory>()
     val sut = AppService(appRepository, appFactory)
