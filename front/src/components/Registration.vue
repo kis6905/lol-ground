@@ -24,15 +24,18 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
 import { useSummonerStore } from "../store/summoner";
+import { useAppStore } from "../store/app";
 import { storeToRefs } from "pinia";
 
 const summonerStore = useSummonerStore();
+const appStore = useAppStore();
 const { summonerNames } = storeToRefs(summonerStore);
 
 const summonerName = ref("");
 const registSummoner = () => {
   summonerStore.registerSummoner(summonerName.value);
   summonerName.value = "";
+  appStore.saveSubscribers(summonerNames.value);
 };
 
 onBeforeMount(() => {});
