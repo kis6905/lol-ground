@@ -44,6 +44,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("com.mysql:mysql-connector-j:8.0.33")
 
+    implementation("com.google.firebase:firebase-admin:9.2.0")
+
     testImplementation(kotlin("test"))
     testImplementation("io.kotest:kotest-assertions-core-jvm:$kotestVersion")
     testImplementation("io.kotest:kotest-framework-engine-jvm:$kotestVersion")

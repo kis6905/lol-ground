@@ -4,10 +4,12 @@ import vuetify from './plugins/vuetify'
 import router from './router'
 import { loadFonts } from './plugins/webfontloader'
 import { createPinia } from 'pinia'
-import { Skeletor } from "vue-skeletor";
-import "vue-skeletor/dist/vue-skeletor.css";
+import { Skeletor } from "vue-skeletor"
+import "vue-skeletor/dist/vue-skeletor.css"
+import { initFcm } from "./plugins/firebase"
 
 loadFonts()
+initFcm()
 
 const pinia = createPinia()
 

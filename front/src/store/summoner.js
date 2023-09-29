@@ -23,7 +23,7 @@ export const useSummonerStore = defineStore('summonerStore', () => {
     summonerNames.value = [
       "Develeaf",
     ];
-    return summonerNames;
+    return summonerNames.value;
   }
 
   const removeSummoner = (summonerName) => {
