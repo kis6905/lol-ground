@@ -21,16 +21,27 @@ export const useAppStore = defineStore('appStore', () => {
       headers: {
         "content-type": "application/json"
       },
-      body: JSON.stringify({ appId: finalAppId, fcmTokne: "" }),
+      body: JSON.stringify({ appId: finalAppId, fcmToken }),
     });
 
-    console.log(`saveApp response.status: ${response.status}`);
+    console.log(`[saveApp] response.status: ${response.status}`);
 
     if (response.status === 409) {
       finalAppId = await saveApp(generateAppId());
     }
 
     return finalAppId;
+  }
+
+  const updateFcmToken = async (appId, fcmToken) => {
+    const response = await fetch(`/api/app/fcmToken`, {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({ appId, fcmToken }),
+    });
+    console.log(`[updateFcmToken] response.status: ${response.status}`);
   }
 
   const generateAppId = () => {
@@ -53,5 +64,7 @@ export const useAppStore = defineStore('appStore', () => {
     appId,
     initAppId,
     saveSubscribers,
+    saveApp,
+    updateFcmToken,
   }
 })

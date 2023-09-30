@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getToken, getMessaging, onMessage } from "firebase/messaging";
+import { useAppStore } from '../store/app';
 
 const firebaseConfig = {
   apiKey: "AIzaSyCzaVlgWB8A53NjVPEHirkMmNeqSyCJp04",
@@ -15,15 +16,25 @@ const initFcm = () => {
 
   const messaging = getMessaging();
   getToken(messaging, { vapidKey: "BOE0KVbxOaeSIM0J9fANs6JGzBFVf6b22ifpNyeqb0BO2BzO__HhBk6AB_JlKOU1uaqu5At03TrEETUMrRgmPb8" })
-    .then((currentToken) => {
+    .then(async (currentToken) => {
+
       if (currentToken) {
-        console.log("currentToken: ", currentToken);
+        const appStore = useAppStore();
+
+        console.log("getToken() currentToken: ", currentToken);
+        console.log("getToken() appId       : ", appStore.appId);
         
-        // TODO: token 서버에 저장
+        let appId = appStore.appId;
+        if (!appStore.appId) {
+          appId = appStore.initAppId();
+        }
+
+        appStore.updateFcmToken(appId, currentToken);
 
       } else {
         console.warn('No registration token available.');
       }
+
     }).catch((err) => {
       console.log('An error occurred while retrieving token. ', err);
     });

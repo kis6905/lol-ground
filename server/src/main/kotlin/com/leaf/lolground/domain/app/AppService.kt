@@ -37,5 +37,4 @@ class AppService(
         app.modifiedBy = appDto.appId
         return appFactory.createAppDto(app)
     }
-
 }
