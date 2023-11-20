@@ -1,20 +1,28 @@
 package com.leaf.lolground.infrastructure.firebase
 
 import com.google.auth.oauth2.GoogleCredentials
-import org.springframework.beans.factory.annotation.Value
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.Message
 import org.springframework.stereotype.Component
 
 @Component
-class FirebaseHelper {
-
-    @Value("\${firebase.cloud-messaging.credential}")
-    lateinit var fcmCredentialJson: String
+class FirebaseHelper(
+    val googleCredentials: GoogleCredentials,
+    val firebaseMessaging: FirebaseMessaging,
+) {
 
     fun getAccessToken(): String? {
-        val googleCredentials = GoogleCredentials
-            .fromStream(fcmCredentialJson.byteInputStream())
-            .createScoped(listOf("https://www.googleapis.com/auth/firebase.messaging", "https://www.googleapis.com/auth/cloud-platform"))
         return googleCredentials.refreshAccessToken()?.tokenValue
+    }
+
+    // TODO: test
+    fun sendMessage(fcmToken: String, title: String, content: String) {
+        val message: Message = Message.builder()
+            .putData("title", title)
+            .putData("content", content)
+            .setToken(fcmToken)
+            .build()
+        firebaseMessaging.send(message)
     }
 
 }

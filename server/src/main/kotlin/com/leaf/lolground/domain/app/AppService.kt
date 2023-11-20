@@ -16,6 +16,12 @@ class AppService(
     val appFactory: AppFactory,
 ) {
 
+    fun findActiveAppList(): List<AppDto> {
+        val date = LocalDateTime.now().minusDays(14)
+        return appRepository.findAllByLastLoginAtAfter(date)
+            .map { appFactory.createAppDto(it) }
+    }
+
     fun save(appDto: AppDto, ip: String?): AppDto? {
         val app = appRepository.findByIdOrNull(appDto.appId)
         app?.apply {

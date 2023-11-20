@@ -34,6 +34,7 @@ lol:
       summoner: https://kr.api.riotgames.com
       match: https://asia.api.riotgames.com
       league: https://kr.api.riotgames.com
+      spectator: https://kr.api.riotgames.com
 
 ---
 spring:

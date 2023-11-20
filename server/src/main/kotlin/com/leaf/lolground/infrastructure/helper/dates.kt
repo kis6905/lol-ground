@@ -44,15 +44,15 @@ fun LocalDateTime.getMondayOfCurrentWeek(): LocalDateTime {
 
 fun LocalDateTime?.diffFormattedStringFromNow(): String {
     if (this == null) {
-        return "0m"
+        return "0분"
     }
     val diffMinutes = this.diffMinutesFromNow()
     val diffHours = this.diffHoursFromNow()
     return if (diffMinutes < 60) {
-        "${diffMinutes}m"
+        "${diffMinutes}분"
     } else if (diffHours < 24) {
-        "${diffHours}h"
+        "${diffHours}시간"
     } else {
-        "${this.diffDaysFromNow()}d"
+        "${this.diffDaysFromNow()}일"
     }
 }

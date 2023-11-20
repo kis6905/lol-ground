@@ -1,6 +1,7 @@
 package com.leaf.lolground.domain.summoner.dto
 
 data class SummonerDto(
+    val id: String = "",
     val puuid: String = "",
     val summonerName: String = "Unknown",
     val soloTier: String = "UnRanked",
@@ -15,7 +16,7 @@ data class SummonerDto(
     val freeLosses: Int = 0,
     var lastRefreshedAgo: String = "",
 ) {
-    var soloWinRate: String = "0"
+    val soloWinRate: String
         get() {
             val winRate: Double = this.soloWins.toDouble() / (this.soloWins + this.soloLosses).toDouble() * 100
             return when (winRate.isNaN()) {
@@ -24,7 +25,7 @@ data class SummonerDto(
             }
         }
 
-    var freeWinRate: String = "0"
+    val freeWinRate: String
         get() {
             val winRate: Double = this.freeWins.toDouble() / (this.freeWins + this.freeLosses).toDouble() * 100
             return when (winRate.isNaN()) {

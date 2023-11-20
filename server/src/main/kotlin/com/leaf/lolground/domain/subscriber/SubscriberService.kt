@@ -1,5 +1,6 @@
 package com.leaf.lolground.domain.subscriber
 
+import com.leaf.lolground.domain.subscriber.dto.SubscriberDto
 import com.leaf.lolground.domain.subscriber.dto.SubscriberRegistrationDto
 import com.leaf.lolground.domain.subscriber.factory.SubscriberFactory
 import com.leaf.lolground.infrastructure.database.subscriber.entity.Subscriber
@@ -43,6 +44,11 @@ class SubscriberService(
         return summonerNameList
             .filter { dbMap[it] == null }
             .map { subscriberFactory.createSubscriberEntity(it, appId) }
+    }
+
+    fun findSubscriberList(appId: String): List<SubscriberDto> {
+        return subscriberRepository.findAllByAppId(appId)
+            .map { subscriberFactory.createSubscriberDto(it) }
     }
 
 }
