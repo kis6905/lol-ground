@@ -3,6 +3,7 @@ package com.leaf.lolground.infrastructure.firebase
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
+import com.leaf.lolground.infrastructure.helper.logger
 import org.springframework.stereotype.Component
 
 @Component
@@ -22,7 +23,8 @@ class FirebaseHelper(
             .putData("content", content)
             .setToken(fcmToken)
             .build()
-        firebaseMessaging.send(message)
+        val sendResult = firebaseMessaging.send(message)
+        logger.info("sendResult: $sendResult")
     }
 
 }
